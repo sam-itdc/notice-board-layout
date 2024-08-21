@@ -253,7 +253,7 @@ hr {
 }
 
 .wrap,#nav {
-    width: 720px;
+    width: 680px;
 }
 
 #header {
@@ -4189,14 +4189,14 @@ body.page-about-group .page-divider {
   </style>
 </head>
 <b:if cond='data:blog.pageType in {&quot;index&quot;}'>
-  <body class="inner-page page-news-list page-news-hqnotices">
+  <body class="inner-page page-news-list">
     <b:section id='blog-container-index'>
       <b:widget id='Blog2' locked='false' title='Blog Posts' type='Blog' version='1'>
         <b:widget-settings>
           <b:widget-setting name='showDateHeader'>true</b:widget-setting>
           <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
           <b:widget-setting name='showShareButtons'>false</b:widget-setting>
-          <b:widget-setting name='showCommentLink'>true</b:widget-setting>
+          <b:widget-setting name='showCommentLink'>false</b:widget-setting>
           <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
           <b:widget-setting name='showAuthor'>true</b:widget-setting>
           <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
@@ -4231,14 +4231,12 @@ body.page-about-group .page-divider {
                                 <b:include data='post' name='post'/>              
                               </h3>
                               <!-- Date display -->
-                              <b:if cond='data:post.dateHeader and data:blog.pageType in {&quot;index&quot;}'>
-                                <div class="metadata">
-                                  <div class="date-and-type">
-                                      <div class="date"><b:eval expr='data:post.date format "YYYY年MM月dd日" '/> <data:post.timestamp/></div>
-                                      <div class="type"></div>
-                                  </div>
+                              <div class="metadata">
+                                <div class="date-and-type">
+                                    <div class="date"><b:eval expr='data:post.date format "YYYY年MM月dd日" '/> <data:post.timestamp/></div>
+                                    <div class="type"></div>
                                 </div>
-                              </b:if>
+                              </div>
                             </div>
                           </b:loop>
                         </div>
@@ -4246,6 +4244,31 @@ body.page-about-group .page-divider {
                 </div>
             </div>
           </div>
+          <script type='text/javascript'>
+            var url = new URL('<data:blog.url/>');
+            var maxResults = url.searchParams.get('max-results');
+            var ulElement = document.createElement('ul');
+            if (maxResults) {
+              const posts = document.getElementsByClassName("news-item");
+              Array.prototype.forEach.call( posts, function(item){
+                var h3 = item.getElementsByTagName('h3').item(0);
+                var a = h3.getElementsByTagName('a').item(1);
+                var href = a.href;
+                var liElem = document.createElement('li');
+                var anchorElem = document.createElement('a');
+                anchorElem.setAttribute("href", href);
+                anchorElem.setAttribute("target", "content-frame");
+                anchorElem.innerHTML =  a.innerHTML;
+                liElem.appendChild(anchorElem);
+                ulElement.appendChild(liElem);
+              });
+              document.body.appendChild(ulElement);
+              const element = document.getElementById("two-col");
+              element.remove();
+              document.body.style.width = '200px';
+              
+            }
+          </script>
         </b:includable>
         <b:includable id='post' var='post'>
           <div itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
